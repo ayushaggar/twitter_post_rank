@@ -1,0 +1,12 @@
+{
+    "tweets": [
+        {
+            "text": "RT @BarackObama: \"We've got to make sure that every woman has the opportunities that she deserves. When a woman succeeds, America succeeds.\u2026",
+            "created_at": 1795348387,
+            "author": {
+                "followers_count": 101,
+                "screen_name": "test"
+            }
+        }
+    ]
+}
