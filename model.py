@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import ijson
+from fuzzywuzzy import fuzz
 
 
 def tweets_to_df(data_list):
@@ -35,7 +36,24 @@ def tweets_to_df(data_list):
     return df
 
 
+def assign_group(df):
+    # assigning group number to each tweet
+    df['group_no'] = 0
+    groups = list()  # groups of names with distance > 90 in fuzzywuzzy
 
+    for index, row in df.iterrows():
+        # 
+        doc = row['text']
+        for g in groups:
+            if all(fuzz.partial_ratio(doc, w) > 90 for w in g):
+                g.append(doc)
+                df.at[index, 'group_no'] = groups.index(g) + 1
+                break
+        else:  # if all distance < 90 new group is made
+            groups.append([doc, ])
+            df.at[index, 'group_no'] = groups.index([doc, ]) + 1
+
+    return [df, groups]
 
 
 def main():
@@ -49,6 +67,9 @@ def main():
 
     # importing data
     data_df = tweets_to_df(data_list)
+
+    # assigning group to tweets
+    [tweet_df, groups] = assign_group(data_df)
 
 
 main()
