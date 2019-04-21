@@ -43,7 +43,6 @@ def assign_group(df):
     groups = list()  # groups of names with distance > 90 in fuzzywuzzy
 
     for index, row in df.iterrows():
-        # 
         doc = row['text']
         for g in groups:
             if all(fuzz.partial_ratio(doc, w) > 90 for w in g):
