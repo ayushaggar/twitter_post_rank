@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import ijson
 from fuzzywuzzy import fuzz
+from sklearn.preprocessing import MinMaxScaler
 
 
 def tweets_to_df(data_list):
@@ -87,7 +88,23 @@ def main():
     date_accu.columns = date_accu.columns.get_level_values(1)
     date_accu.reset_index(inplace=True)
 
-
+    # scaling values between 0 and 1
+    scaler = MinMaxScaler()
+    date_accu['no_of_tweets_scaled'] = scaler.fit_transform(
+        date_accu['no_of_tweets'].values.reshape(-1, 1))
+    date_accu['no_of_followers_scaled'] = scaler.fit_transform(
+        date_accu['no_of_followers'].values.reshape(-1, 1))
+    date_accu['engagement_time_in_seconds_scaled'] = scaler.fit_transform(
+        date_accu['engagement_time_in_seconds'].values.reshape(-1, 1))
+    date_accu['rank_score'] = date_accu.apply(
+        lambda x: x['no_of_tweets_scaled'] +
+        x['no_of_followers_scaled'] +
+        x['engagement_time_in_seconds_scaled'],
+        axis=1)
+    date_accu = date_accu.sort_values(by='rank_score', ascending=False)
+    date_accu['tweets'] = date_accu.apply(
+        lambda x: groups[x['group_no'] - 1], axis=1)
+    print date_accu
 
 
 
