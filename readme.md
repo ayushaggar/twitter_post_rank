@@ -19,6 +19,8 @@
 
 **Note**: Output is shown as print and saved as csv file
 
+**Note**: Python code is pep8 compliant
+
 **** 
 
 ## Tools use 
