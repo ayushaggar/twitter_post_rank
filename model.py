@@ -71,5 +71,25 @@ def main():
     # assigning group to tweets
     [tweet_df, groups] = assign_group(data_df)
 
+    # group tweets and finding stats
+    # aggregation function
+    aggregation_functions = {
+        'followers_count': {
+            'no_of_followers': 'sum',
+            'no_of_tweets': 'count'},
+        'created_at': {
+            'max_date': 'max',
+            'min_date': 'min',
+            'engagement_time_in_seconds': lambda x: (
+                max(x) -
+                min(x)).total_seconds()}}
+    date_accu = tweet_df.groupby(['group_no']).aggregate(aggregation_functions)
+    date_accu.columns = date_accu.columns.get_level_values(1)
+    date_accu.reset_index(inplace=True)
+
+
+
+
+
 
 main()
