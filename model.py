@@ -106,7 +106,14 @@ def main():
         lambda x: groups[x['group_no'] - 1], axis=1)
     print date_accu
 
-
+    # export to csv
+    if os.path.isdir('result') is False:
+        os.makedirs('result')
+    date_accu.to_csv(
+        'result/groups.csv',
+        sep='\t',
+        encoding='utf-8',
+        index=False)
 
 
 main()
